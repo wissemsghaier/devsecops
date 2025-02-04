@@ -81,7 +81,7 @@
                 	</targetTests>
                 	<mutationThreshold>80</mutationThreshold> <!-- Seuil de qualité -->
                 	<outputFormats>
-                    	<param>HTML</param> <!-- Format du rapport -->
+                    	<param>XML</param> <!-- Format du rapport -->
                 	</outputFormats>
                 	<timestampedReports>false</timestampedReports> <!-- Empêcher plusieurs rapports -->
             	</configuration>
