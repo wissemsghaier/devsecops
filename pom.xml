@@ -67,6 +67,25 @@
                 	</execution>
             	</executions>
         	</plugin>
+
+			<plugin>
+            	<groupId>org.pitest</groupId>
+            	<artifactId>pitest-maven</artifactId>
+            	<version>1.15.0</version> <!-- Dernière version de PIT -->
+            	<configuration>
+                	<targetClasses>
+                    	<param>com.example.*</param> <!-- Classes à tester -->
+                	</targetClasses>
+                	<targetTests>
+                    	<param>com.example.tests.*</param> <!-- Tests à exécuter -->
+                	</targetTests>
+                	<mutationThreshold>80</mutationThreshold> <!-- Seuil de qualité -->
+                	<outputFormats>
+                    	<param>HTML</param> <!-- Format du rapport -->
+                	</outputFormats>
+                	<timestampedReports>false</timestampedReports> <!-- Empêcher plusieurs rapports -->
+            	</configuration>
+        	</plugin>
 			
 		</plugins>
 	</build>

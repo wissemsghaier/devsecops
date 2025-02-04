@@ -20,37 +20,48 @@ pipeline {
           }
         }
 
-
-        stage('Build & Push Docker Image') {
+        stage('Mutation Tests - PIT') {
           steps {
-            script {
-              def dockerImage = "wissem200/devsecops:v1.0.0"  // Remplace avec ton nom d'image
-              def dockerCredentials = "dockerhub"    // ID des credentials Jenkins
-
-            // Connexion à Docker Hub
-              withDockerRegistry([credentialsId: dockerCredentials, url: '']) {
-                sh "docker build -t ${dockerImage} ."
-                sh "docker push ${dockerImage}"
-              }
+            sh "mvn org.pitest:pitest-maven:mutationCoverage"
+          }
+          post {
+            always {
+              pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
             }
           }
-        }
+        } 
 
 
-        stage('Kubernetes Deployment - DEV') {
-          steps {
-            script {
-              def dockerImage = "wissem200/devsecops:v1.0.0"
+        // stage('Build & Push Docker Image') {
+        //   steps {
+        //     script {
+        //       def dockerImage = "wissem200/devsecops:v1.0.0"  // Remplace avec ton nom d'image
+        //       def dockerCredentials = "dockerhub"    // ID des credentials Jenkins
 
-              withKubeConfig([credentialsId: 'kube-config']) {
-                sh """
-                    sed -i 's#image: replace#image: ${dockerImage}#g' k8s_deployment_service.yaml
-                    kubectl apply -f k8s_deployment_service.yaml
-                """
-              }
-            }
-          }
-        }
+        //     // Connexion à Docker Hub
+        //       withDockerRegistry([credentialsId: dockerCredentials, url: '']) {
+        //         sh "docker build -t ${dockerImage} ."
+        //         sh "docker push ${dockerImage}"
+        //       }
+        //     }
+        //   }
+        // }
+
+
+        // stage('Kubernetes Deployment - DEV') {
+        //   steps {
+        //     script {
+        //       def dockerImage = "wissem200/devsecops:v1.0.0"
+
+        //       withKubeConfig([credentialsId: 'kube-config']) {
+        //         sh """
+        //             sed -i 's#image: replace#image: ${dockerImage}#g' k8s_deployment_service.yaml
+        //             kubectl apply -f k8s_deployment_service.yaml
+        //         """
+        //       }
+        //     }
+        //   }
+        // }
 
 
 
