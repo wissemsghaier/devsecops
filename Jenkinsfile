@@ -28,12 +28,7 @@ pipeline {
             always {
               pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
             }
-          }
-
-
-          
-
-          
+          }  
         } 
 
 
@@ -52,6 +47,7 @@ pipeline {
                 waitForQualityGate abortPipeline: true
               }   
             }
+          }
         }
 
 
