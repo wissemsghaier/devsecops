@@ -39,11 +39,12 @@ pipeline {
 
         stage('SonarQube - SAST') {
           steps {
-            mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=test-application \
-            -Dsonar.projectName='test-application' \
-            -Dsonar.host.url=http://172.24.0.2:9001 \
-            -Dsonar.token=sqp_abd75c68f8f9c7edb430e1842715af33b02549f2
+            sh '''
+                mvn clean verify sonar:sonar \
+                -Dsonar.projectKey=test-application \
+                -Dsonar.projectName="test-application" \
+                -Dsonar.host.url=http://localhost:9001/ \
+               '''
           }
         }
 
