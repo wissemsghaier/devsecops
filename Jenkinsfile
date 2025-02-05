@@ -41,9 +41,10 @@ pipeline {
           steps {
             sh '''
                 mvn clean verify sonar:sonar \
-                -Dsonar.projectKey=test-application \
-                -Dsonar.projectName="test-application" \
-                -Dsonar.host.url=http://localhost:9001/ \
+                -Dsonar.projectKey=test \
+                -Dsonar.projectName='test' \
+                -Dsonar.host.url=http://localhost:9001 \
+                -Dsonar.token=sqp_ad7728601464bf0dab9614b6a217a237efca61b3
                '''
           }
         }
