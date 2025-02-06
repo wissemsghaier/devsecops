@@ -9,17 +9,7 @@ pipeline {
             }
         }
 
-        stage('Vulnerability Scan - dependency ') {
-          steps {
-            sh "mvn dependency-check:check"
-          }
-          // post {
-          //   always {
-          //     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-          //   }
-          // }
-          
-        }
+        
 
 
         stage('Unit Tests - JUnit and Jacoco') {
@@ -62,6 +52,18 @@ pipeline {
               }   
             }
           }
+          
+        }
+        stage('Vulnerability Scan - dependency ') {
+          steps {
+            sh "mvn dependency-check:check"
+          }
+          // post {
+          //   always {
+          //     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+          //   }
+          // }
+          
         }
 
 
@@ -101,10 +103,12 @@ pipeline {
     }
     post {
       always {
-        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
         junit 'target/surefire-reports/*.xml'
         jacoco execPattern: 'target/jacoco.exec'
         pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        
+        
       }
     }
 }
