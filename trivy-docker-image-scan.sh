@@ -57,7 +57,7 @@ set -e  # Stoppe le script en cas d'erreur
 # sudo apt-get install -y trivy
 
 # Définition du nom de l'image Docker
-dockerImageName="openjdk"
+dockerImageName="adoptopenjdk/openjdk8:alpine-slim"
 echo "Scanning image: $dockerImageName"
 
 # Lancer le scan Trivy et générer un rapport JSON
@@ -68,12 +68,14 @@ docker run --rm -v /tmp/.cache:/root/.cache/ aquasec/trivy:0.17.2 -q image --exi
 docker run --rm -v /tmp/.cache:/root/.cache/ aquasec/trivy:0.17.2 -q image --exit-code 1 --severity CRITICAL --light "$dockerImageName"
 
 # Vérifier le code de sortie de Trivy
-exit_code=$?
-echo "Exit Code : $exit_code"
+  Trivy scan result processing
+    exit_code=$?
+    echo "Exit Code : $exit_code"
 
-if [[ "$exit_code" -ne 1 ]]; then
-    echo "❌ Échec : Des vulnérabilités HIGH ou CRITICAL ont été trouvées dans l'image Docker."
-    exit 1
-else
-    echo "✅ Succès : Aucune vulnérabilité HIGH ou CRITICAL détectée."
-fi
+     # Check scan results
+    if [[ "${exit_code}" == 1 ]]; then
+        echo "Image scanning failed. Vulnerabilities found"
+        exit 1;
+    else
+        echo "Image scanning passed. No CRITICAL vulnerabilities found"
+    fi;
