@@ -57,7 +57,7 @@ set -e  # Stoppe le script en cas d'erreur
 # sudo apt-get install -y trivy
 
 # Définition du nom de l'image Docker
-dockerImageName="wissem200/devsecops:v1.0.0"
+dockerImageName="openjdk"
 echo "Scanning image: $dockerImageName"
 
 # Lancer le scan Trivy et générer un rapport JSON

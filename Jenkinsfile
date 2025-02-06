@@ -70,10 +70,10 @@ pipeline {
         stage('Vulnerability Scan - Docker') {
           steps {
             script {
-              def imageName = "wissem200/devsecops:v1.0.0"
+            //   def imageName = "wissem200/devsecops:v1.0.0"
             
-            // Build Docker image from Dockerfile
-                sh "docker build -t ${imageName} ."
+            // // Build Docker image from Dockerfile
+            //     sh "docker build -t ${imageName} ."
             
                 parallel(
                   "Dependency Scan": {
