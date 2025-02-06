@@ -78,6 +78,11 @@ pipeline {
               }
             )
           }
+          post {
+            always {
+              archiveArtifacts artifacts: 'trivy-report.json', allowEmptyArchive: true
+            }
+          }
         }
 
 
@@ -124,7 +129,7 @@ pipeline {
         jacoco execPattern: 'target/jacoco.exec'
         
         dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-        archiveArtifacts artifacts: 'trivy-report.json'
+
         
         
       }
