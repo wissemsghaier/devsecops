@@ -54,17 +54,34 @@ pipeline {
           }
           
         }
-        stage('Vulnerability Scan - dependency ') {
-          steps {
-            sh "mvn dependency-check:check"
-          }
-          // post {
-          //   always {
-          //     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-          //   }
-          // }
+        // stage('Vulnerability Scan - dependency ') {
+        //   steps {
+        //     sh "mvn dependency-check:check"
+        //   }
+        //   // post {
+        //   //   always {
+        //   //     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        //   //   }
+        //   // }
           
+        // }
+
+
+        stage('Vulnerability Scan - Docker') {
+          steps {
+            parallel(
+              "Dependency Scan": {
+                sh "mvn dependency-check:check"
+              },
+              "Trivy Scan": {
+                sh "bash trivy-docker-image-scan.sh"
+              }
+            )
+          }
         }
+
+
+
 
 
         // stage('Build & Push Docker Image') {
@@ -107,6 +124,7 @@ pipeline {
         jacoco execPattern: 'target/jacoco.exec'
         
         dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        archiveArtifacts artifacts: 'trivy-report.json'
         
         
       }
