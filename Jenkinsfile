@@ -2,13 +2,9 @@ pipeline {
   agent any
   environment {
         dockerImage = "wissem200/devsecops:v3.0.0"
-        JAVA_HOME = '/usr/lib/jvm/java-8-openjdk-amd64' // Spécifier le JAVA_HOME sur l'agent
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        
     }
-  tools {
-        jdk 'jdk8'  // Utilise la configuration JDK 'jdk8' dans Jenkins
-        maven 'M3'  // Assurez-vous d'avoir Maven configuré dans Jenkins sous 'M3' ou une version que vous préférez
-  }
+  
   stages {
       stage('check version ') {
             steps {
