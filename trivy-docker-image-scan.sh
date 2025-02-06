@@ -68,7 +68,7 @@ docker run --rm -v /tmp/.cache:/root/.cache/ aquasec/trivy:0.17.2 -q image --exi
 docker run --rm -v /tmp/.cache:/root/.cache/ aquasec/trivy:0.17.2 -q image --exit-code 1 --severity CRITICAL --light "$dockerImageName"
 
 # Vérifier le code de sortie de Trivy
-  Trivy scan result processing
+  # Trivy scan result processing
     exit_code=$?
     echo "Exit Code : $exit_code"
 
