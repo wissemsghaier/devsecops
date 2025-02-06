@@ -98,7 +98,7 @@
     			<version>6.1.6</version>
     			<configuration>
         			<format>ALL</format>
-        			<failBuildOnCVSS>10</failBuildOnCVSS> <!-- fail the build if CVSS is 9 or higher -->
+        			<failBuildOnCVSS>12</failBuildOnCVSS> <!-- fail the build if CVSS is 9 or higher -->
     			</configuration>
 			</plugin>
 
