@@ -69,15 +69,22 @@ pipeline {
 
         stage('Vulnerability Scan - Docker') {
           steps {
-            parallel(
-              "Dependency Scan": {
-                sh "mvn dependency-check:check"
-              },
-              "Trivy Scan": {
-                sh "bash trivy-docker-image-scan.sh"
-              }
-            )
-          }
+            script {
+              def imageName = "wissem200/devsecops:v1.0.0"
+            
+            // Build Docker image from Dockerfile
+                sh "docker build -t ${imageName} ."
+            
+                parallel(
+                  "Dependency Scan": {
+                    sh "mvn dependency-check:check"
+                  },
+                  "Trivy Scan": {
+                    sh "bash trivy-docker-image-scan.sh"
+                }
+              )
+            }
+          }   
           post {
             always {
               archiveArtifacts artifacts: 'trivy-report.json', allowEmptyArchive: true

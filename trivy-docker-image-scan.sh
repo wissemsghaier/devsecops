@@ -45,16 +45,16 @@
 
 set -e  # Stoppe le script en cas d'erreur
 
-# Ajouter le dépôt Trivy
-sudo apt-get update
-sudo apt-get -y install wget apt-transport-https gnupg lsb-release
+# # Ajouter le dépôt Trivy
+# sudo apt-get update
+# sudo apt-get -y install wget apt-transport-https gnupg lsb-release
 
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo gpg --dearmor -o /usr/share/keyrings/trivy-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/trivy-archive-keyring.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+# wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo gpg --dearmor -o /usr/share/keyrings/trivy-archive-keyring.gpg
+# echo "deb [signed-by=/usr/share/keyrings/trivy-archive-keyring.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
 
-# Mise à jour et installation de Trivy
-sudo apt-get update
-sudo apt-get install -y trivy
+# # Mise à jour et installation de Trivy
+# sudo apt-get update
+# sudo apt-get install -y trivy
 
 # Définition du nom de l'image Docker
 dockerImageName="wissem200/devsecops:v1.0.0"
