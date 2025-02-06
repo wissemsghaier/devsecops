@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  environment {
+        dockerImage = "wissem200/devsecops:v1.0.0"
+    }
 
   stages {
       stage('Build Artifact') {
@@ -96,20 +99,39 @@ pipeline {
 
 
 
-        // stage('Build & Push Docker Image') {
-        //   steps {
-        //     script {
-        //       def dockerImage = "wissem200/devsecops:v1.0.0"  // Remplace avec ton nom d'image
-        //       def dockerCredentials = "dockerhub"    // ID des credentials Jenkins
+          stage('Build & Push Docker Image') {
+            steps {
+              script {
+                def dockerImage = "wissem200/devsecops:v1.0.0"  // Remplace avec ton nom d'image
+                def dockerCredentials = "dockerhub"    // ID des credentials Jenkins
 
-        //     // Connexion à Docker Hub
-        //       withDockerRegistry([credentialsId: dockerCredentials, url: '']) {
-        //         sh "docker build -t ${dockerImage} ."
-        //         sh "docker push ${dockerImage}"
-        //       }
-        //     }
-        //   }
-        // }
+                // Connexion à Docker Hub
+                withDockerRegistry([credentialsId: dockerCredentials, url: '']) {
+                  sh "docker build -t ${dockerImage} ."
+                  sh "docker push ${dockerImage}"
+                }
+              }
+            }
+          }
+          stage('Vulnerability Scan - Trivy') {
+            steps {
+                script {
+                    def dockerImage = "wissem200/devsecops:v1.0.0"
+                    def exitCode = sh(script: "trivy image --exit-code 1 --severity CRITICAL --light ${dockerImage}", returnStatus: true)
+                    if (exitCode != 0) {
+                        error "❌ Des vulnérabilités CRITICAL ont été trouvées !"
+                    } else {
+                        echo "✅ Aucune vulnérabilité CRITICAL détectée."
+                    }
+                }
+            }
+            post {
+                always {
+                    sh 'trivy image --format json --output trivy-rapport.json $IMAGE_NAME'
+                    archiveArtifacts artifacts: 'trivy-rapport.json', allowEmptyArchive: true
+                }
+            }
+          }
 
 
         // stage('Kubernetes Deployment - DEV') {
