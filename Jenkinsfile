@@ -8,6 +8,19 @@ pipeline {
               archive 'target/*.jar' //so that they can be downloaded later
             }
         }
+
+        stage('Vulnerability Scan - dependency ') {
+          steps {
+            sh "mvn dependency-check:check"
+          }
+          post {
+            always {
+              dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+            }
+          }
+        }
+
+
         stage('Unit Tests - JUnit and Jacoco') {
           steps {
             sh "mvn test"
