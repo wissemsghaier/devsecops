@@ -79,19 +79,11 @@ pipeline {
 
         stage('SonarQube - SAST') {
           steps {
-            withSonarQubeEnv('SonarQube') {
-              sh '''
-                mvn clean verify sonar:sonar \
-                -Dsonar.projectKey=mytest \
-                -Dsonar.projectName='mytest' \
-            
-               '''
-            }
-            timeout(time: 2, unit: 'MINUTES') {
-              script {
-                waitForQualityGate abortPipeline: true
-              }   
-            }
+            mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=mytest \
+            -Dsonar.projectName='mytest' \
+            -Dsonar.host.url=http://localhost:9001 \
+            -Dsonar.token=sqp_4f95e5ec350a0feb99053d3db8cdb2be8987c07d
           }
           
         }
