@@ -1,5 +1,11 @@
 pipeline {
   agent any
+  tools {
+ 
+    maven 'maven'    // Uses the Maven version configured in Jenkins
+     
+         
+  }
   environment {
         dockerImage = "wissem200/devsecops:v3.0.0"
         
