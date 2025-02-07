@@ -41,66 +41,68 @@ pipeline {
         
 
 
-        // stage('Unit Tests - JUnit and Jacoco') {
+         stage('Unit Tests - JUnit and Jacoco') {
+           agent {
+             docker {
+               image 'wissem200/maven:v1.0.0'
+               args '-u root --privileged'
+             }
+           }
+           steps {
+             sh "mvn test"
+           }
+           // post {
+           //   always {
+           //     junit 'target/surefire-reports/*.xml'
+           //     jacoco execPattern: 'target/jacoco.exec'
+           //   }
+           // }
+         }
+
+         stage('Mutation Tests - PIT') {
+           agent {
+             docker {
+               image 'wissem200/maven:v1.0.0'
+               args '-u root --privileged'
+             }
+           }
+           steps {
+             sh "mvn org.pitest:pitest-maven:mutationCoverage"
+           }
+           post {
+             always {
+               pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+             }
+           }  
+         } 
+
+
+        // stage('SonarQube - SAST') {
         //   agent {
-        //     docker {
-        //       image 'wissem200/maven:v1.0.0'
-        //       args '-u root --privileged'
-        //     }
-        //   }
+        //         docker {
+        //             image 'wissem200/maven:v1.0.0'
+        //             args '-u root --privileged'
+        //         }
+        //     } 
+
         //   steps {
-        //     sh "mvn test"
-        //   }
-        //   // post {
-        //   //   always {
-        //   //     junit 'target/surefire-reports/*.xml'
-        //   //     jacoco execPattern: 'target/jacoco.exec'
-        //   //   }
-        //   // }
-        // }
-
-        // stage('Mutation Tests - PIT') {
-        //   agent {
-        //     docker {
-        //       image 'wissem200/maven:v1.0.0'
-        //       args '-u root --privileged'
-        //     }
-        //   }
-        //   steps {
-        //     sh "mvn org.pitest:pitest-maven:mutationCoverage"
-        //   }
-        //   post {
-        //     always {
-        //       pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-        //     }
-        //   }  
-        // } 
-
-
-        stage('SonarQube - SAST') {
-          agent {
-                docker {
-                    image 'wissem200/maven:v1.0.0'
-                    args '-u root --privileged'
-                }
-            } 
-
-          steps {
             
-            withSonarQubeEnv('SonarQube') {
-              sh '''
-                mvn clean verify sonar:sonar \
-                -Dsonar.projectKey=test \
-                -Dsonar.projectName='test' \
-              '''
-            }
-            timeout(time: 2, unit: 'MINUTES') {
-              script {
-                waitForQualityGate abortPipeline: true
-              } 
-            }
-          }
-        }  
+        //     withSonarQubeEnv('SonarQube') {
+        //       sh '''
+        //         mvn clean verify sonar:sonar \
+        //         -Dsonar.projectKey=test \
+        //         -Dsonar.projectName='test' \
+        //       '''
+        //     }
+        //     timeout(time: 2, unit: 'MINUTES') {
+        //       script {
+        //         waitForQualityGate abortPipeline: true
+        //       } 
+        //     }
+        //   }
+        // }  
+
+        
         // stage('Vulnerability Scan - dependency ') {
         //   steps {
         //     sh "mvn dependency-check:check"
