@@ -83,8 +83,8 @@ pipeline {
             withSonarQubeEnv('SonarQube') {
               sh '''
                 mvn clean verify sonar:sonar \
-                -Dsonar.projectKey=mytest \
-                -Dsonar.projectName='mytest' \
+                -Dsonar.projectKey=test \
+                -Dsonar.projectName='test' \
               '''
             }
             timeout(time: 2, unit: 'MINUTES') {
