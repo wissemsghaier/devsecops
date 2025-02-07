@@ -108,6 +108,12 @@
         			<failBuildOnCVSS>12</failBuildOnCVSS> <!-- fail the build if CVSS is 9 or higher -->
     			</configuration>
 			</plugin>
+			<plugin>
+    			<groupId>org.sonarsource.scanner.maven</groupId>
+    			<artifactId>sonar-maven-plugin</artifactId>
+    			<version>3.9.1.2184</version>
+			</plugin>
+
 
 			
 		</plugins>
