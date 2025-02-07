@@ -86,13 +86,7 @@ pipeline {
           }
 
           steps {
-            sh """
-            mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=mytest \
-            -Dsonar.projectName='mytest' \
-            -Dsonar.host.url=http://localhost:9001 \
-            -Dsonar.token=sqp_4f95e5ec350a0feb99053d3db8cdb2be8987c07d
-            """
+            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=spring-boot -Dsonar.projectName='spring-boot' -Dsonar.host.url=http://localhost:9001 \-Dsonar.token=sqp_d41efcbaaa277112a74c48c8ca3987cd05da2bb8"
           }
           
         }
