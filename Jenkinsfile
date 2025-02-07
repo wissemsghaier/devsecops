@@ -78,18 +78,22 @@ pipeline {
 
 
         stage('SonarQube - SAST') {
-          agent {
-            docker {
-              image 'wissem200/maven:v1.0.0'
-              args '-u root --privileged'
-            }
-          }
 
           steps {
-            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=spring-boot -Dsonar.projectName='spring-boot' -Dsonar.host.url=http://localhost:9001 -Dsonar.token=sqp_08138c33664521f7ca2075a28c37945f7e88be3ed"
+            withSonarQubeEnv('SonarQube') {
+              sh '''
+                mvn clean verify sonar:sonar \
+                -Dsonar.projectKey=mytest \
+                -Dsonar.projectName='mytest' \
+              '''
+            }
+            timeout(time: 2, unit: 'MINUTES') {
+              script {
+                waitForQualityGate abortPipeline: true
+              } 
+            }
           }
-          
-        }
+        }  
         // stage('Vulnerability Scan - dependency ') {
         //   steps {
         //     sh "mvn dependency-check:check"
