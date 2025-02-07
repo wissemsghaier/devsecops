@@ -80,6 +80,12 @@ pipeline {
         stage('SonarQube - SAST') {
 
           steps {
+            agent {
+                docker {
+                    image 'wissem200/maven:v1.0.0'
+                    args '-u root --privileged'
+                }
+            }
             withSonarQubeEnv('SonarQube') {
               sh '''
                 mvn clean verify sonar:sonar \
