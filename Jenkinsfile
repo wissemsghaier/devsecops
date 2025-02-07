@@ -13,6 +13,12 @@ pipeline {
   
   stages {
       stage('check version ') {
+            agent {
+                docker {
+                    image 'wissem200/maven:v1.0.0'
+                    args '-u root --privileged'
+                }
+            }
             steps {
               sh "java --version "
               sh " mvn --version"
@@ -20,6 +26,12 @@ pipeline {
       }
 
       stage('Build Artifact') {
+            agent {
+                docker {
+                    image 'wissem200/maven:v1.0.0'
+                    args '-u root --privileged'
+                }
+            }
             steps {
               sh "mvn clean package -DskipTests=true"
               archive 'target/*.jar' //so that they can be downloaded later
@@ -30,6 +42,12 @@ pipeline {
 
 
         stage('Unit Tests - JUnit and Jacoco') {
+          agent {
+            docker {
+              image 'wissem200/maven:v1.0.0'
+              args '-u root --privileged'
+            }
+          }
           steps {
             sh "mvn test"
           }
@@ -42,6 +60,12 @@ pipeline {
         }
 
         stage('Mutation Tests - PIT') {
+          agent {
+            docker {
+              image 'wissem200/maven:v1.0.0'
+              args '-u root --privileged'
+            }
+          }
           steps {
             sh "mvn org.pitest:pitest-maven:mutationCoverage"
           }
